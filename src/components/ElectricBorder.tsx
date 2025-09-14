@@ -1,108 +1,80 @@
-"use client";
-import { useEffect, useId, useLayoutEffect, useRef, CSSProperties, ReactNode } from 'react';
-import './ElectricBorder.css';
+'use client';
 
-type ElectricBorderProps = {
-  children: ReactNode;
-  color?: string;
-  speed?: number;
-  chaos?: number;
-  thickness?: number;
-  className?: string;
-  style?: CSSProperties;
-};
+import { useEffect, useRef } from 'react';
 
-const ElectricBorder = ({
-  children,
-  color = '#5227FF',
-  speed = 1,
-  chaos = 1,
-  thickness = 2,
-  className,
-  style
-}: ElectricBorderProps) => {
-  const rawId = useId().replace(/[:]/g, '');
-  const filterId = `turbulent-displace-${rawId}`;
-  const svgRef = useRef<SVGSVGElement | null>(null);
-  const rootRef = useRef<HTMLDivElement | null>(null);
-  const strokeRef = useRef<HTMLDivElement | null>(null);
+export default function ElectricBorder() {
+  const svgRef = useRef<SVGSVGElement>(null);
 
-  const updateAnim = () => {
-    const svg = svgRef.current;
-    const host = rootRef.current;
-    if (!svg || !host) return;
+  useEffect(() => {
+    if (!svgRef.current) return;
 
-    if (strokeRef.current) {
-      strokeRef.current.style.filter = `url(#${filterId})`;
-    }
+    const dyAnims: SVGAnimationElement[] = Array.from(
+      svgRef.current.querySelectorAll('.dy-anim')
+    ) as SVGAnimationElement[];
 
-    const width = Math.max(1, Math.round(host.clientWidth || host.getBoundingClientRect().width || 0));
-    const height = Math.max(1, Math.round(host.clientHeight || host.getBoundingClientRect().height || 0));
+    const dxAnims: SVGAnimationElement[] = Array.from(
+      svgRef.current.querySelectorAll('.dx-anim')
+    ) as SVGAnimationElement[];
 
-    const dyAnims = Array.from(svg.querySelectorAll('feOffset > animate[attributeName="dy"]'));
-    if (dyAnims.length >= 2) {
-      dyAnims[0].setAttribute('values', `${height}; 0`);
-      dyAnims[1].setAttribute('values', `0; -${height}`);
-    }
-
-    const dxAnims = Array.from(svg.querySelectorAll('feOffset > animate[attributeName="dx"]'));
-    if (dxAnims.length >= 2) {
-      dxAnims[0].setAttribute('values', `${width}; 0`);
-      dxAnims[1].setAttribute('values', `0; -${width}`);
-    }
-
-    const baseDur = 6;
-    const dur = Math.max(0.001, baseDur / (speed || 1));
-    [...dyAnims, ...dxAnims].forEach(a => a.setAttribute('dur', `${dur}s`));
-
-    const disp = svg.querySelector('feDisplacementMap');
-    if (disp) disp.setAttribute('scale', String(30 * (chaos || 1)));
-
-    const filterEl = svg.querySelector(`#${CSS.escape(filterId)}`);
-    if (filterEl) {
-      filterEl.setAttribute('x', '-200%');
-      filterEl.setAttribute('y', '-200%');
-      filterEl.setAttribute('width', '500%');
-      filterEl.setAttribute('height', '500%');
-    }
-
-    requestAnimationFrame(() => {
-      [...dyAnims, ...dxAnims].forEach(a => {
-        if (typeof a.beginElement === 'function') {
-          try { a.beginElement(); } catch {}
-        }
+    const runAnimation = () => {
+      requestAnimationFrame(() => {
+        [...dyAnims, ...dxAnims].forEach(a => {
+          const anim = a as SVGAnimationElement;
+          if (typeof anim.beginElement === 'function') {
+            try {
+              anim.beginElement();
+            } catch {}
+          }
+        });
       });
-    });
-  };
+    };
 
-  useEffect(() => { updateAnim(); }, [speed, chaos]);
-  useLayoutEffect(() => {
-    if (!rootRef.current) return;
-    const ro = new ResizeObserver(() => updateAnim());
-    ro.observe(rootRef.current);
-    updateAnim();
-    return () => ro.disconnect();
+    const interval = setInterval(runAnimation, 500);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const vars: CSSProperties = {
-    ['--electric-border-color' as any]: color,
-    ['--eb-border-width' as any]: `${thickness}px`
-  };
-
   return (
-    <div ref={rootRef} className={`electric-border ${className ?? ''}`} style={{ ...vars, ...style }}>
-      <svg ref={svgRef} className="eb-svg" aria-hidden focusable="false">
-        <defs>{/* المحتوى SVG كما في الكود السابق */}</defs>
-      </svg>
-      <div className="eb-layers">
-        <div ref={strokeRef} className="eb-stroke" />
-        <div className="eb-glow-1" />
-        <div className="eb-glow-2" />
-        <div className="eb-background-glow" />
-      </div>
-      <div className="eb-content">{children}</div>
-    </div>
-  );
-};
+    <svg
+      ref={svgRef}
+      className="absolute top-0 left-0 w-full h-full pointer-events-none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* مثال على خطوط كهربائية عمودية */}
+      <line
+        x1="50"
+        y1="0"
+        x2="50"
+        y2="100"
+        stroke="#8b5cf6"
+        strokeWidth="2"
+        className="dy-anim"
+      >
+        <animate
+          attributeName="y2"
+          values="0;100;0"
+          dur="0.5s"
+          repeatCount="indefinite"
+        />
+      </line>
 
-export default ElectricBorder;
+      {/* مثال على خطوط كهربائية أفقية */}
+      <line
+        x1="0"
+        y1="50"
+        x2="100"
+        y2="50"
+        stroke="#3b82f6"
+        strokeWidth="2"
+        className="dx-anim"
+      >
+        <animate
+          attributeName="x2"
+          values="0;100;0"
+          dur="0.5s"
+          repeatCount="indefinite"
+        />
+      </line>
+    </svg>
+  );
+}
