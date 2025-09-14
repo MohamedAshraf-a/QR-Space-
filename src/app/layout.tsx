@@ -31,7 +31,7 @@ export default function RootLayout({ children, params }: RootLayoutProps) {
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
       <body className={`${inter.variable} ${notoSansArabic.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <Header />
+<Header translations={{ toggleLanguage: "Toggle Language", toggleTheme: "Toggle Theme" }} />
           <div className="cosmic-background" />
           <div className="stars" />
           <main>{children}</main>
