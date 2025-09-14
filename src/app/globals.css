@@ -1,26 +1,57 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
+  /* 🌞 Light theme */
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 0 0% 98%;          /* أبيض رمادي */
+    --foreground: 240 10% 3.9%;      /* أسود */
+    --accent: 200 90% 40%;           /* سماوي */
+  }
+
+  /* 🌙 Dark theme */
+  .dark {
+    --background: 240 10% 3.9%;      /* كحلي غامق */
+    --foreground: 0 0% 100%;         /* أبيض */
+    --accent: 280 60% 60%;           /* بنفسجي */
+  }
+
+  /* 🌅 Morning theme */
+  .morning {
+    --background: 40 100% 92%;       /* أصفر باهت */
+    --foreground: 25 70% 20%;        /* بني غامق */
+    --accent: 25 95% 55%;            /* برتقالي */
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-inter), sans-serif;
+    transition: background-color 0.5s ease, color 0.5s ease;
+  }
+
+  [lang="ar"] body {
+    font-family: var(--font-noto-arabic), sans-serif;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ✨ Cosmic Background Animation */
+.cosmic-background {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  background-color: hsl(var(--background));
+  background-image:
+    radial-gradient(ellipse at 20% 25%, hsl(var(--accent)) 0px, transparent 50%),
+    radial-gradient(ellipse at 80% 30%, hsl(calc(var(--accent-hue, 200) + 30) 60% 30%) 0px, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, hsl(calc(var(--accent-hue, 200) + 60) 70% 35%) 0px, transparent 50%);
+  animation: cosmic-flow 25s infinite linear;
 }
+
+@keyframes cosmic-flow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+

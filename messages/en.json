@@ -1,0 +1,19 @@
+{
+  "Index": {
+    "title": "CodeSpace | Generate and Download QR Codes",
+    "subtitle": "Create and download QR codes for any text or link. Free and easy to use.",
+    "placeholder": "Enter text or link...",
+    "generateButton": "Generate",
+    "downloadButton": "Download as ",
+    "info": "Create and download QR codes for any text or link. Free and easy to use."
+  },
+  "Footer": {
+    "copyright": "All rights reserved.",
+    "madeWith": "Made with 💜 by",
+    "by": "Mohamed Ashraf"
+  },
+  "Header": {
+    "toggleLanguage": "Switch Language",
+    "toggleTheme": "Toggle Theme"
+  }
+}
