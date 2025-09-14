@@ -14,27 +14,22 @@ const notoSansArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "QR Space | Generate & Download QR Codes",
+  title: "QR Space",
   description:
     "Easily generate and download QR codes for any text or link. Free and simple to use.",
 };
 
-export default function RootLayout({
-  children,
-  params: { locale },
-}: {
+type RootLayoutProps = {
   children: React.ReactNode;
-  params: { locale: string };
-}) {
+  params: any; // مؤقتًا لتجاوز Type Error في Next 15
+};
+
+export default function RootLayout({ children, params }: RootLayoutProps) {
+  const locale = params?.locale ?? "en"; // افتراضي إذا ما وجد locale
+
   return (
-    <html
-      lang={locale}
-      dir={locale === "ar" ? "rtl" : "ltr"}
-      suppressHydrationWarning
-    >
-      <body
-        className={`${inter.variable} ${notoSansArabic.variable} antialiased`}
-      >
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
+      <body className={`${inter.variable} ${notoSansArabic.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
