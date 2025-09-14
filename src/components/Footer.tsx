@@ -6,52 +6,46 @@ import { motion } from 'framer-motion';
 interface FooterProps {
   footerText?: string;
   madeByText?: string;
-  translations?: {
-    copyright: string;
-    madeWith: string;
-    by: string;
-  };
 }
 
-export default function Footer({ footerText, madeByText, translations }: FooterProps) {
+export default function Footer({ footerText, madeByText }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   const iconHover = {
     scale: 1.2,
     rotate: [0, 10, -10, 0],
-    boxShadow: '0px 0px 15px rgba(255, 255, 255, 0.6)',
-    transition: { duration: 0.5, repeat: Infinity, repeatType: 'loop' },
+    boxShadow: "0 0 8px rgba(130, 76, 252, 0.6)",
+    transition: {
+      duration: 0.6,
+      repeat: Infinity,
+      repeatType: "loop" as const // ✔ هذا صحيح مع TypeScript
+    },
   };
 
   return (
-    <footer className="w-full text-center p-6 mt-16 text-white/70 text-sm relative z-10">
-      <p>
-        © {currentYear} QR Space. {footerText ?? translations?.copyright}
-      </p>
+    <footer className="w-full p-6 flex flex-col items-center justify-center bg-background/70 backdrop-blur-md mt-12">
+      <p className="text-foreground/70 mb-2">{footerText || `© ${currentYear} QR-Space`}</p>
+      <p className="text-foreground/50 mb-4">{madeByText || "Made with 💜 by Mohamed Ashraf"}</p>
 
-      <div className="flex justify-center items-center gap-6 mt-4">
-        <span>{madeByText ?? `${translations?.madeWith} ${translations?.by}`}</span>
-
-        {/* GitHub Icon */}
+      <div className="flex gap-6">
         <motion.a
           href="https://github.com/MohamedAshraf-a"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 "
+          className="text-blue-400"
           whileHover={iconHover}
         >
-          <Github size={38} />
+          <Github size={28} />
         </motion.a>
 
-        {/* LinkedIn Icon */}
         <motion.a
-          href="https://www.linkedin.com/in/mohamed-ashraf-99b754317/"
+          href="https://linkedin.com/in/mohamedashraf"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 "
+          className="text-blue-500"
           whileHover={iconHover}
         >
-          <Linkedin size={30} />
+          <Linkedin size={28} />
         </motion.a>
       </div>
     </footer>
