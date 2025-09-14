@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_Arabic } from "next/font/google";
 import { ThemeProvider } from "./theme-provider";
-import Header from "./components/Header";
+import Header from "../components/Header";
 import "./globals.css";
 
 const inter = Inter({
