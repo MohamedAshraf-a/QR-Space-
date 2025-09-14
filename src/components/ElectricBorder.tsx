@@ -1,8 +1,24 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, ReactNode } from 'react';
 
-export default function ElectricBorder() {
+interface ElectricBorderProps {
+  children?: ReactNode;       // <- إضافة children
+  color?: string;
+  speed?: number;
+  chaos?: number;
+  thickness?: number;
+  className?: string;
+}
+
+export default function ElectricBorder({
+  children,
+  color = '#5227FF',
+  speed = 1,
+  chaos = 1,
+  thickness = 2,
+  className = '',
+}: ElectricBorderProps) {
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -35,46 +51,49 @@ export default function ElectricBorder() {
   }, []);
 
   return (
-    <svg
-      ref={svgRef}
-      className="absolute top-0 left-0 w-full h-full pointer-events-none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      {/* مثال على خطوط كهربائية عمودية */}
-      <line
-        x1="50"
-        y1="0"
-        x2="50"
-        y2="100"
-        stroke="#8b5cf6"
-        strokeWidth="2"
-        className="dy-anim"
+    <div className={className}>
+      <svg
+        ref={svgRef}
+        className="absolute top-0 left-0 w-full h-full pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
       >
-        <animate
-          attributeName="y2"
-          values="0;100;0"
-          dur="0.5s"
-          repeatCount="indefinite"
-        />
-      </line>
+        <line
+          x1="50"
+          y1="0"
+          x2="50"
+          y2="100"
+          stroke={color}
+          strokeWidth={thickness}
+          className="dy-anim"
+        >
+          <animate
+            attributeName="y2"
+            values="0;100;0"
+            dur={`${0.5 / speed}s`}
+            repeatCount="indefinite"
+          />
+        </line>
 
-      {/* مثال على خطوط كهربائية أفقية */}
-      <line
-        x1="0"
-        y1="50"
-        x2="100"
-        y2="50"
-        stroke="#3b82f6"
-        strokeWidth="2"
-        className="dx-anim"
-      >
-        <animate
-          attributeName="x2"
-          values="0;100;0"
-          dur="0.5s"
-          repeatCount="indefinite"
-        />
-      </line>
-    </svg>
+        <line
+          x1="0"
+          y1="50"
+          x2="100"
+          y2="50"
+          stroke={color}
+          strokeWidth={thickness}
+          className="dx-anim"
+        >
+          <animate
+            attributeName="x2"
+            values="0;100;0"
+            dur={`${0.5 / speed}s`}
+            repeatCount="indefinite"
+          />
+        </line>
+      </svg>
+
+      {/* عرض أي محتوى داخل ElectricBorder */}
+      {children}
+    </div>
   );
 }
