@@ -14,8 +14,7 @@ export default function Footer({ footerText, madeByText }: FooterProps) {
   const iconHover = {
     scale: 1.2,
     rotate: [0, 10, -10, 0],
-    boxShadow: '0px 0px 15px rgba(255, 255, 255, 0.6)',
-    transition: { duration: 0.5, repeat: Infinity, repeatType: 'loop' },
+    transition: { duration: 0.4 },
   };
 
   return (
@@ -27,23 +26,21 @@ export default function Footer({ footerText, madeByText }: FooterProps) {
       <div className="flex justify-center items-center gap-6 mt-4">
         <span>{madeByText}</span>
 
-        {/* GitHub Icon */}
         <motion.a
           href="https://github.com/MohamedAshraf-a"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 "
+          className="text-blue-400 hover:text-blue-300"
           whileHover={iconHover}
         >
-          <Github size={38} />
+          <Github size={30} />
         </motion.a>
 
-        {/* LinkedIn Icon */}
         <motion.a
           href="https://www.linkedin.com/in/mohamed-ashraf-99b754317/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 "
+          className="text-blue-400 hover:text-blue-300"
           whileHover={iconHover}
         >
           <Linkedin size={30} />
